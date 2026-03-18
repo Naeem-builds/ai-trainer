@@ -1,0 +1,140 @@
+╔════════════════════════════════════════════════════════════════════╗
+║        OOP CONCEPTS — MINI AI TRAINER FRAMEWORK                   ║
+║           Quick Reference for Exam                                 ║
+╚════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ABSTRACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What: Hide implementation details; force interface
+Code: class BaseModel(ABC) → @abstractmethod train()
+Rule: Cannot instantiate abstract class directly
+Example: BaseModel() → ERROR (must use LinearRegressionModel or NeuralNetworkModel)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. INHERITANCE (is-a)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What: Child class reuses parent's code
+Code: class LinearRegressionModel(BaseModel)
+Key: super().__init__(config) → call parent's __init__
+Child has access to: self.config (from parent)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. METHOD OVERRIDING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What: Child provides own implementation
+Code: def train(self, data) → different in LinearRegression vs NeuralNetwork
+Rule: Same name, different behavior
+Called: Automatically based on object type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. POLYMORPHISM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What: One interface, multiple implementations
+Code: Trainer.run() works for BOTH lr_model AND nn_model
+Rule: model.train() calls correct method automatically
+Result: trainer1.run() ≠ trainer2.run() (different output, same code)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. COMPOSITION (OWNS) — ◆ filled diamond
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What: Parent OWNS child object (tight coupling)
+Code: BaseModel has self.config = ModelConfig(...)
+Rule: Child created INSIDE parent
+Death: If parent dies → child dies too
+Example: Model cannot exist without Config
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. AGGREGATION (USES) — ◇ empty diamond
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What: Parent USES child object (loose coupling)
+Code: Trainer receives DataLoader from outside
+Rule: Child created OUTSIDE, passed IN
+Death: If parent dies → child lives!
+Example: DataLoader exists independently; Trainer just uses it
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. CLASS ATTRIBUTE vs INSTANCE ATTRIBUTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CLASS ATTRIBUTE:        INSTANCE ATTRIBUTE:
+BaseModel.model_count   self.config
+Shared by ALL           Unique per object
+accessed via: Class     accessed via: self
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. MAGIC METHODS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+__init__  → constructor
+__repr__  → how object looks when printed
+__str__   → string representation
+__eq__    → equality comparison
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPOSITION vs AGGREGATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                COMPOSITION          AGGREGATION
+─────────────────────────────────────────────────
+Owns            YES (OWNS)           NO (USES)
+Created         INSIDE parent        OUTSIDE parent
+Lifetime        Tied to parent       Independent
+Example         Config in Model      DataLoader in Trainer
+Coupling        TIGHT                LOOSE
+Symbol          ◆ (filled)           ◇ (empty)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXAM ANSWER TEMPLATES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: Explain Abstraction in your code.
+A: BaseModel is abstract — it defines methods train() and evaluate() 
+   that child classes MUST implement. This hides implementation 
+   and forces a common interface.
+
+Q: What is inheritance? Show code.
+A: LinearRegressionModel inherits from BaseModel using 
+   super().__init__(config) to call parent's __init__ and reuse 
+   self.config attribute.
+
+Q: Explain Polymorphism.
+A: Trainer.run() works with ANY model type (LR or NN) without 
+   changes. It calls model.train() which automatically selects 
+   the correct method based on actual object type.
+
+Q: Composition vs Aggregation?
+A: Composition: BaseModel OWNS ModelConfig (created inside, 
+   dies together). Aggregation: Trainer USES DataLoader (created 
+   outside, lives independently).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RUNNING THE CODE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+$ uv run ai_trainer_framework.py
+
+[Config] LinearRegression | lr=0.01 | epochs=10
+[Config] NeuralNetwork | lr=0.001 | epochs=20
+Models created: 2
+
+--- Training LinearRegression ---
+LinearRegression: Training on 5 samples for 10 epochs (lr=0.01)
+LinearRegression: Evaluation MSE = 0.084
+
+--- Training NeuralNetwork ---
+NeuralNetwork [64, 32, 1]: Training on 5 samples for 20 epochs (lr=0.001)
+NeuralNetwork: Evaluation Accuracy = 85.8%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY POINTS TO MEMORIZE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. super() = call parent's method
+2. @abstractmethod = must be overridden
+3. Composition = owns (tight)
+4. Aggregation = uses (loose)
+5. Polymorphism = one interface, many behaviors
+6. Class attribute = shared by all
+7. Instance attribute = unique to object
+8. Magic method __repr__ = how object prints
+
+Good luck on your exam! 🎯
